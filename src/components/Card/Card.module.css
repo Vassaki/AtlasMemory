@@ -1,0 +1,177 @@
+.cardWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  /* Required for 3D flip effect */
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.cardWrapper.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardFront,
+.cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* The "Back" of the card as it lies on the table (Face down) */
+.cardFront {
+  background: var(--surface);
+  border: var(--glass-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardFront::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(17, 24, 39, 0.15);
+}
+
+.pattern {
+  display: none;
+  /* Hide the old pattern */
+}
+
+.cardWrapper:hover .cardFront {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(17, 24, 39, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* The "Front" of the card (Face up) */
+.cardBack {
+  background: var(--surface);
+  transform: rotateY(180deg);
+  border: var(--card-border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardBack h3 {
+  font-family: var(--font-main);
+  font-size: clamp(0.6rem, 2.5vw, 1.1rem);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 8px;
+  width: 100%;
+  padding: 0 4px;
+  line-height: 1.1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  text-align: center;
+}
+
+.flagImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.countryName {
+  font-size: clamp(0.5rem, 2vw, 1rem);
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  word-break: break-word;
+  hyphens: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* FEEDBACK ANIMATIONS */
+
+/* Success Pulse */
+.cardWrapper.matched .cardBack {
+  animation: pulseSuccess 0.8s ease-out forwards;
+}
+
+@keyframes pulseSuccess {
+  0% {
+    box-shadow: 0 0 0 0 rgba(17, 24, 39, 0.1);
+    border-color: rgba(17, 24, 39, 0.1);
+    background-color: var(--surface);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(17, 24, 39, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(17, 24, 39, 0);
+    border-color: rgba(17, 24, 39, 0.15);
+    background-color: var(--accent-success);
+  }
+}
+
+/* Error Shake */
+.cardWrapper.error .cardInner {
+  animation: shakeError 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.cardWrapper.error .cardBack {
+  border-color: rgba(17, 24, 39, 0.15);
+  background-color: var(--accent-error);
+}
+
+@keyframes shakeError {
+
+  10%,
+  90% {
+    transform: rotateY(180deg) translateX(-1px);
+  }
+
+  20%,
+  80% {
+    transform: rotateY(180deg) translateX(1px);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: rotateY(180deg) translateX(-2px);
+  }
+
+  40%,
+  60% {
+    transform: rotateY(180deg) translateX(2px);
+  }
+}
